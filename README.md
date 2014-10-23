@@ -1,2 +1,4 @@
 imganalysis
 ===========
+
+Softwarepraktikum Bildverarbeitung
