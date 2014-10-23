@@ -1,4 +1,4 @@
 imganalysis
 ===========
 
-Softwarepraktikum Bildverarbeitung
+Softwarepraktikum Bildverarbeitung stinkt
