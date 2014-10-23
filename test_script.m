@@ -1,5 +1,5 @@
 tic;
-Image = imread('C:\Users\User\Desktop\UNI\Bildverarbeitung\training\001-1.jpg');
+Image = imread(fullfile('training', '001-1.jpg'));
 img = ecbp(Image, 2, 0);
 
 
