@@ -1,15 +1,13 @@
 tic;
 Image = imread(fullfile('training', '001-1.jpg'));
-img = rgb2hsv(ecbp(Image, 1, 20));
+img = rgb2hsv(Image);
 
-hue = rgbchannel(img, 1);
-imshow(hsv2rgb(hue));
-%myaa(9);
+img_thresh = img(:, :, 2)>0.1;
 
-cp2tform
-imtransform
-    
+SE = strel('square', 20);
+img_thresh = imdilate(img_thresh, SE');  
 
+imshow(img_thresh);
 %Convert Image to grayscale by setting rgb to their mean value
 %GreyImg = (Image(:,:,1)+Image(:,:,2)+Image(:,:,3))/3;
 %GreyImg(50,50) = 255;
