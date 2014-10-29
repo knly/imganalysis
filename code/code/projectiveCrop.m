@@ -10,7 +10,7 @@ function Iout = projectiveCrop(I,p,p0)
     ymax = max(p0(:,2));
     
     transform = fitgeotrans(p, p0, 'NonreflectiveSimilarity');
-    imgref = imref2d([xmax, ymax]);
-    Iout = imrotate(imwarp(I, transform, 'OutputView', imgref), 90);
+    imgref = imref2d([ymax, xmax]);
+    Iout = imwarp(I, transform, 'OutputView', imgref);
     
 end

@@ -9,12 +9,8 @@ function B = backgroundSubtraction(I, t)
     %2. Create a binary mask by using a threshold on the hsv image:
     binary_mask = hsv_image(:, :, 2) > t;
     
-    %If there are any holes in, close them with dilate, then erode by the
-    %same amount to get back to the original size
-    
-    SE = strel('disk', 40, 6);
-    binary_mask = imdilate(binary_mask, SE);
-    binary_mask = imerode(binary_mask, SE);
+    %If there are any holes in 
+    %
     
     B = binary_mask;
     

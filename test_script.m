@@ -3,9 +3,6 @@ Image = imread(fullfile('training', '001-1.jpg'));
 img = rgb2hsv(Image);
 
 
-p = mark(img);
-imcrop = projectiveCrop(img);
-
 
 
 %img_thresh = img(:, :, 2)>0.1;

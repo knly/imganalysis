@@ -1,0 +1,19 @@
+Image = imread(fullfile('training','001-6.jpg'));
+
+p = mark(Image);
+cropped_image = projectiveCrop(Image, p);
+
+bin_image = backgroundSubtraction(cropped_image, 0.15);
+
+%Create 3-dim bit mask from 1-dim mask
+dim_mask = zeros(size(cropped_image));
+dim_mask(:, :, 1) = bin_image .* 255;
+dim_mask(:, :, 2) = bin_image .* 255;
+dim_mask(:, :, 3) = bin_image .* 255;
+dim_mask = uint8(dim_mask);
+
+% Add cropped image and the mask to see differences
+vgl_image = cropped_image + dim_mask;
+ 
+imshow(vgl_image);
+
