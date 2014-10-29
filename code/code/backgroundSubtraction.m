@@ -12,7 +12,9 @@ function B = backgroundSubtraction(I, t)
     %If there are any holes in, close them with dilate, then erode by the
     %same amount to get back to the original size
     
-    SE = strel('disk', 40, 6);
+    % SE: Erode/Dilate parameter; Check for a disk shaped region of radius
+    % 20, N=6 (Some algorhythm parameter)
+    SE = strel('disk', 20, 6);
     binary_mask = imdilate(binary_mask, SE);
     binary_mask = imerode(binary_mask, SE);
     
