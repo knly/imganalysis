@@ -1,4 +1,4 @@
-function Iout = projectiveCrop(I,p,p0)
+function Iout = projectiveCrop2(I,p,p0)
     % Set defaultparameter for p0
     if nargin < 3, p0 =[ 1 1;  2000 1 ; 2000 1450; 1 1450 ]; 
     end;
