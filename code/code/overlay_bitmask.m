@@ -11,7 +11,7 @@ function img_out = overlay_bitmask( Image, bitmask)
     dim_mask(:, :, 3) = bitmask .* 255;
     dim_mask = uint8(dim_mask);
     
-    % Add both for the output
+    % Add both for the output, ./2 for transparency
     
     img_out = Image + dim_mask ./ 2;
 end
