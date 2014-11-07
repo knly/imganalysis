@@ -1,9 +1,15 @@
-Image = imread(fullfile('training','001-6.jpg'));
+Image = imread(fullfile('training','001-2.jpg'));
 
 
 
-filelist = dir(['training' filesep '*.jpg']);
-fileNames = {filelist.name}';
+
+p = find_marks(Image);
+cropped_image = projectiveCrop(Image, p);
+
+imshow(cropped_image);
+
+%filelist = dir(['training' filesep '*.jpg']);
+%fileNames = {filelist.name}';
 
 %p = find_marks(Image);
 

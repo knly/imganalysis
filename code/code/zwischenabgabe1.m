@@ -13,7 +13,7 @@ for i=1:numel(trainImageList)
         B  = backgroundSubtraction(I2); 
         imwrite(I2, fileCROP); 
         imwrite(B, fileBG);
-    elseif(exist(fileCROP,'file')==0)
+    elseif(exist(fileCROP,'file'))
         I2 = imread(fileCROP);
         B  = backgroundSubtraction(I2); 
         imwrite(B, fileBG); 
