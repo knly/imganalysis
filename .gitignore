@@ -3,5 +3,6 @@ code/code/training-bg/*
 code/code/training-crop/*
 code/code/list/*
 
-# Mac Noise
+# Noise
 .DS_Store
+Thumbs.db
