@@ -8,7 +8,7 @@ for i=1:numel(trainImageList)
     fileCROP = strrep(fileCROP, 'test', 'test-crop');
     if(exist(fileCROP,'file')==0)
         I  = imread(trainImageList{i});
-        p  = mark(I);
+        p  = find_marks(I);
         I2 = projectiveCrop(I,p);
         B  = backgroundSubtraction(I2); 
         imwrite(I2, fileCROP); 
