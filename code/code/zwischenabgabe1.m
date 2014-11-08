@@ -6,19 +6,18 @@ for i=1:numel(trainImageList)
     fileBG   = strrep(fileBG, 'test', 'test-BG'); 
     fileCROP = strrep(trainImageList{i}, 'training', 'training-crop');
     fileCROP = strrep(fileCROP, 'test', 'test-crop');
-    if(exist(fileCROP,'file')==0)
+    if(exist(fileCROP,'file')==0||exist(fileBG,'file')==0)
         I  = imread(trainImageList{i});
         p  = find_marks(I);
         I2 = projectiveCrop(I,p);
         B  = backgroundSubtraction(I2); 
         imwrite(I2, fileCROP); 
         imwrite(B, fileBG);
-    elseif(exist(fileCROP,'file'))
-        I2 = imread(fileCROP);
-        B  = backgroundSubtraction(I2); 
-        imwrite(B, fileBG); 
+   % else
+   %     I2 = imread(fileCROP);
+   %     B  = imread(fileBG);
     end
 end
 
-saveLists('./list/',trainImageList);
+saveLists(['.' filesep 'list' filesep],trainImageList);
 

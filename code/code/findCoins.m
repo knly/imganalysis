@@ -1,12 +1,24 @@
 function [coinList, L] = findCoins(B)
     L        = zeros(size(B));
     coinList = ObjectList();
-    numObj   = 0; %this is a dummy
+    CC = bwconncomp(B);
+    numObj   = CC.NumObjects;
+    S = regionprops(CC,'Centroid');
+    p = cat(1, S.Centroid); % Struct2Mat
+    P = regionprops(CC,'PixelList');
     for i=1:numObj
-        L = L+zeros(size(L));    %this is a dummy
-        objectSize   = 42;       %this is a dummy
-        objectCenter = [08, 15]; %this is a dummy
-        coinList.addObject(objectSize,objectCenter); 
-     end
+        pixels = P(i).PixelList;
+        objectSize   = numel(pixels);
+        if objectSize > 5000
+            L(pixels) = i;
+            %for k = 1:numel(pixels)            
+             %   L(ind2sub(CC.ImageSize,pixels(k))) = i;
+            %end
+            
+            objectCenter = p(i, :);
+            coinList.addObject(objectSize,objectCenter);
+        end
+    end
+    %coinList.showHist();
 
 end

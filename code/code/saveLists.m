@@ -1,10 +1,12 @@
 function saveLists(listpath, imageList)
-    for i=1:numel(imageList) 
+    for i=1:numel(imageList)
+        tic;
+        
         fileBG = strrep(imageList{i}, 'training', 'training-bg');
         fileBG = strrep(fileBG, 'test', 'test-BG'); 
         fileCROP = strrep(imageList{i}, 'training', 'training-crop');
         fileCROP = strrep(fileCROP, 'test', 'test-crop');
-        sep = strfind(imageList{i}, '/');
+        sep = strfind(imageList{i}, filesep);
         dataname = imageList{i}(sep(numel(sep)):numel(imageList{i})-4);
         fileLIST = [listpath, dataname, 'mat'];
         if(numel(strfind(dataname,'001'))>0), value = 0.01; end;
@@ -15,7 +17,8 @@ function saveLists(listpath, imageList)
         if(numel(strfind(dataname,'050'))>0), value = 0.50; end;
         if(numel(strfind(dataname,'100'))>0), value = 1.00; end;
         if(numel(strfind(dataname,'200'))>0), value = 2.00; end;
-       
+        
+        
         if(exist(fileLIST,'file')==0)
             B = imread(fileBG);
             I = imread(fileCROP);
@@ -31,9 +34,10 @@ function saveLists(listpath, imageList)
             coinList.show(I);
             subplot(1,2,2);
             coinList.show(B);
-            k = waitforbuttonpress();
+            %k = waitforbuttonpress();
             close;
             save(fileLIST,'coinList');
         end
+        toc;
     end
 end
