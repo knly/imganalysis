@@ -1,6 +1,6 @@
 function saveLists(listpath, imageList)
     for i=1:numel(imageList)
-        tic;
+        
         
         fileBG = strrep(imageList{i}, 'training', 'training-bg');
         fileBG = strrep(fileBG, 'test', 'test-BG'); 
@@ -38,6 +38,6 @@ function saveLists(listpath, imageList)
             close;
             save(fileLIST,'coinList');
         end
-        toc;
+        
     end
 end
