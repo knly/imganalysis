@@ -7,7 +7,7 @@ clear;
 trainImageList = getImageList('training');
 
 % Process training images to produce training dataset
-%processImages(trainImageList, 'training', false, false)
+processImages(trainImageList, 'training', false, false)
 
 
 %% Evaluate Training Data

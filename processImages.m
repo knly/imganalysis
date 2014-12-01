@@ -22,10 +22,12 @@ function processImages(imageList, dataPath, classificator, showResults)
             
             I = projectiveCrop(I1, p);
             imwrite(I, fileCROP); 
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done cropping image in %s.', toc(tCrop));
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Done cropping image in %s.', toc(tCrop));
         else
             I = imread(fileCROP);
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already cropped image.\n');
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Already cropped image.\n');
         end
         
         % Background subtraction
@@ -35,10 +37,12 @@ function processImages(imageList, dataPath, classificator, showResults)
             fprintf('Finding background...\n');
             B  = backgroundSubtraction(I); 
             imwrite(B, fileBG);
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done finding background in %s.\n', toc(tBG));
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Done finding background in %s.\n', toc(tBG));
         else
             B = imread(fileBG);
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already found background.\n');
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Already found background.\n');
         end
 
         % Find Coins and save to list
@@ -71,13 +75,15 @@ function processImages(imageList, dataPath, classificator, showResults)
             
             save(fileLIST,'coinList');
             
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done finding coins in %s.\n', toc(tFind));
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Done finding coins in %s.\n', toc(tFind));
         else
             load(fileLIST, 'coinList');
-            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already found coins.\n');
+            cprintf([.2,.65,.4], '%c ', char(10004));
+            cprintf('text', 'Already found coins.\n');
         end
         
-        fprintf('Processing took %s\n', toc(tProcessing)); 
+        fprintf('Processing took %s.\n', toc(tProcessing)); 
        
         % Show results
         if (showResults)
