@@ -5,7 +5,7 @@ function processImages(imageList, dataPath, isTraining, showResults)
     % Iterate images
     for i=1:numel(imageList)
         tProcessing = tic;
-        fprintf('\n- Processing image %s...\n', imageList{i});
+        cprintf('_blue', '\n- Processing image %s...\n', imageList{i});
         
         % Find marks & Crop
         fileCROP = strrep(imageList{i}, dataPath, [dataPath '-crop']);
@@ -16,16 +16,16 @@ function processImages(imageList, dataPath, isTraining, showResults)
             
             p  = find_marks(I1);
             if p == 0
-               fprintf('Error finding marks on image %s\n', imageList{i});
+               cprintf('_red', 'Error finding marks on image %s\n', imageList{i});
                continue; 
             end
             
             I = projectiveCrop(I1, p);
             imwrite(I, fileCROP); 
-            fprintf('Done cropping image in %s.\n', toc(tCrop));
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done cropping image in %s.', toc(tCrop));
         else
             I = imread(fileCROP);
-            fprintf('Already cropped image.\n')
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already cropped image.\n');
         end
         
         % Background subtraction
@@ -35,10 +35,10 @@ function processImages(imageList, dataPath, isTraining, showResults)
             fprintf('Finding background...\n');
             B  = backgroundSubtraction(I); 
             imwrite(B, fileBG);
-            fprintf('Done finding background in %s.\n', toc(tBG));
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done finding background in %s.\n', toc(tBG));
         else
             B = imread(fileBG);
-            fprintf('Already found background.\n')
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already found background.\n');
         end
 
         % Find Coins and save to list
@@ -71,10 +71,10 @@ function processImages(imageList, dataPath, isTraining, showResults)
             
             save(fileLIST,'coinList');
             
-            fprintf('Done finding coins in %s.\n', toc(tFind));
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Done finding coins in %s.\n', toc(tFind));
         else
             load(fileLIST, 'coinList');
-            fprintf('Already found coins.\n');
+            cprintf([.2,.65,.4], '%c ', char(10004)); cprintf('Already found coins.\n');
         end
         
         fprintf('Processing took %s\n', toc(tProcessing)); 

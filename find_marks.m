@@ -38,11 +38,24 @@ function p = find_marks( Image )
     
     [~, indices] = sort(p);
     p(:, :) = p(indices(:, 2), :);  % Punkte nach y Werten sortiert
-    if (( p(2, 1) < p(3, 1) ) && ( true ))
-        p = p([1,3,2,4], :);        % Permutiere ggf. 2 &3 Koordinate
-    end
-    p = p([1,2,4,3], :);            % Tausche 4 &3
     
+    % Sortiere obere 2 Punkte, links bildet den Anfang:
+    if ( p(1, 1) > p(2, 1) )
+        p = p([2,1,3,4], :);
+    end
+    
+    %Sortiere untere 2 Punkte, rechts bildet den Anfang:
+    if ( p(4, 1) > p(3, 1) )
+        p = p([1,2,4,3], :);
+    end
+        
+    %if (( p(2, 1) < p(3, 1) ) && ( p(2, 1) < p(1, 1) ))
+    %    p = p([1,3,2,4], :);        % Permutiere ggf. 2 &3 Koordinate
+    %end
+    
+    %if ~(( p(4, 1) < p(2, 1) ) && ( p(4, 1) < p(3, 1) ))
+    %    p = p([1,2,4,3], :);            % Tausche 4 &3
+    %end
         
     % Prüfe nach Hochformat/Querformat:
     distance12 = (p(1,1) - p(2,1)).^2 + (p(1,2) - p(2,2)).^2;
