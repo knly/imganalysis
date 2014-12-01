@@ -40,7 +40,6 @@ function processImages(imageList, dataPath, isTraining, showResults)
             B = imread(fileBG);
             fprintf('Already found background.\n')
         end
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
@@ -73,7 +72,7 @@ function processImages(imageList, dataPath, isTraining, showResults)
             save(fileLIST,'coinList');
             
             fprintf('Done finding coins in %s.\n', toc(tFind));
-        else%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        else
             load(fileLIST, 'coinList');
             fprintf('Already found coins.\n');
         end
