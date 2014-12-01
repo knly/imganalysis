@@ -7,7 +7,7 @@ clear;
 trainImageList = getImageList('training');
 
 % Process training images to produce training dataset
-processImages(trainImageList, 'training', true, false)
+processImages(trainImageList, 'training', false, false)
 
 
 %% Test
@@ -16,4 +16,4 @@ processImages(trainImageList, 'training', true, false)
 testImageList = getImageList('test');
 
 % Process test images to find coins
-processImages(testImageList, 'test', false, true)
+processImages(testImageList, 'test', false, false)

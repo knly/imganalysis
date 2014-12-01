@@ -2,6 +2,9 @@
 training-bg/*
 training-crop/*
 training-list/*
+test-bg/*
+test-crop/*
+test-list/*
 *.m~
 
 # Noise

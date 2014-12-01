@@ -3,7 +3,7 @@ function [coinList, L] = findCoins(B)
 % und enthält Objektgrösse und Objektmittelpunkt
 % L enthält das Binärbild, wobei die Wertigkeit der Pixel abhängig von 
 % ihrer Zusammenhangskomponente ist
-
+    
     L        = zeros(size(B));
     coinList = ObjectList();
     CC = bwconncomp(B);
@@ -26,7 +26,7 @@ function [coinList, L] = findCoins(B)
             coinList.addObject(objectSize,objectCenter);
             %coinList.setObjectFeature(m,objectSize);
         end
+     
     end
     %coinList.showHist();
-
 end

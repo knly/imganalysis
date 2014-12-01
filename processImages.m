@@ -1,9 +1,11 @@
 function processImages(imageList, dataPath, isTraining, showResults)
-
+    [~, ~, ~] = mkdir([dataPath '-crop']);
+    [~, ~, ~] = mkdir([dataPath '-bg']);
+    [~, ~, ~] = mkdir([dataPath '-list']);
     % Iterate images
     for i=1:numel(imageList)
         tProcessing = tic;
-        fprintf('- Processing image %s...\n', imageList{i});
+        fprintf('\n- Processing image %s...\n', imageList{i});
         
         % Find marks & Crop
         fileCROP = strrep(imageList{i}, dataPath, [dataPath '-crop']);
@@ -11,7 +13,13 @@ function processImages(imageList, dataPath, isTraining, showResults)
             tCrop = tic;
             fprintf('Finding marks and cropping...\n');
             I1  = imread(imageList{i});
+            
             p  = find_marks(I1);
+            if p == 0
+               fprintf('Error finding marks on image %s\n', imageList{i});
+               continue; 
+            end
+            
             I = projectiveCrop(I1, p);
             imwrite(I, fileCROP); 
             fprintf('Done cropping image in %s.\n', toc(tCrop));
@@ -32,6 +40,7 @@ function processImages(imageList, dataPath, isTraining, showResults)
             B = imread(fileBG);
             fprintf('Already found background.\n')
         end
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
@@ -51,25 +60,30 @@ function processImages(imageList, dataPath, isTraining, showResults)
                 if(numel(strfind(filename,'100'))>0), value = 1.00; end;
                 if(numel(strfind(filename,'200'))>0), value = 2.00; end;
             else
-                
+                % Detect coins
             end
+            
+            
             for n=1:coinList.Size,
                 if (isTraining)
                     coinList.setObjectValue(n,value);
-                end
-                coinList.setObjectFeature(n,L);        
+                end        
             end;
+            
             save(fileLIST,'coinList');
+            
             fprintf('Done finding coins in %s.\n', toc(tFind));
-        else
+        else%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             load(fileLIST, 'coinList');
             fprintf('Already found coins.\n');
         end
+        
+        fprintf('Processing took %s\n', toc(tProcessing)); 
        
         % Show results
         if (showResults)
             scrsz = get(0,'ScreenSize');
-            figure('Position',[1 scrsz(4) scrsz(3) scrsz(4)])
+            figure('Position',[1 1 scrsz(3) scrsz(4)])
             subplot(1,2,1);
             coinList.show(I);
             subplot(1,2,2);

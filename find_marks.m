@@ -3,9 +3,10 @@ function p = find_marks( Image )
 % Warning: Currently only works, if 4 connected components are found
 % Could be improved by closing holes
 
-    count = 0;
+    count = 0;  % counts # of blue components
+    
     threshold = 6;
-    while count ~= 4       
+    while ((count ~= 4)&&(threshold < 30))
              
         %Use ecbp to extract the 4 blue marks:
         image_blue = ecbp(Image, 3, threshold);
@@ -28,14 +29,21 @@ function p = find_marks( Image )
         [count, ~] = size(p);
         threshold = threshold +1;
     end
-
+    
+    if count ~= 4
+        p = 0;
+        return
+    end
+    
+    
     [~, indices] = sort(p);
     p(:, :) = p(indices(:, 2), :);  % Punkte nach y Werten sortiert
-    if p(2, 1) < p(3, 1)
+    if (( p(2, 1) < p(3, 1) ) && ( true ))
         p = p([1,3,2,4], :);        % Permutiere ggf. 2 &3 Koordinate
     end
     p = p([1,2,4,3], :);            % Tausche 4 &3
     
+        
     % Prüfe nach Hochformat/Querformat:
     distance12 = (p(1,1) - p(2,1)).^2 + (p(1,2) - p(2,2)).^2;
     distance41 = (p(1,1) - p(4,1)).^2 + (p(1,2) - p(4,2)).^2;
