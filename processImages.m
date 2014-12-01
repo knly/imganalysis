@@ -1,4 +1,4 @@
-function processImages(imageList, dataPath, isTraining, showResults)
+function processImages(imageList, dataPath, classificator, showResults)
     [~, ~, ~] = mkdir([dataPath '-crop']);
     [~, ~, ~] = mkdir([dataPath '-bg']);
     [~, ~, ~] = mkdir([dataPath '-list']);
@@ -49,7 +49,7 @@ function processImages(imageList, dataPath, isTraining, showResults)
             fprintf('Finding Coins...\n');
             [coinList, L] = findCoins(B);
             % Get coin value from file name
-            if (isTraining)
+            if (classificator==false)
                 if(numel(strfind(filename,'001'))>0), value = 0.01; end;
                 if(numel(strfind(filename,'002'))>0), value = 0.02; end;
                 if(numel(strfind(filename,'005'))>0), value = 0.05; end;
@@ -58,15 +58,15 @@ function processImages(imageList, dataPath, isTraining, showResults)
                 if(numel(strfind(filename,'050'))>0), value = 0.50; end;
                 if(numel(strfind(filename,'100'))>0), value = 1.00; end;
                 if(numel(strfind(filename,'200'))>0), value = 2.00; end;
-            else
-                % Detect coins
             end
             
-            
             for n=1:coinList.Size,
-                if (isTraining)
+                if (classificator==false)
                     coinList.setObjectValue(n,value);
-                end        
+                else
+                    size = classificator.valueForCoinSize(coinList.List(n).size)
+                    coinList.setObjectValue(n,size);
+                end    
             end;
             
             save(fileLIST,'coinList');

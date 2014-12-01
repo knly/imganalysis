@@ -15,6 +15,15 @@ classdef ObjectList < handle
         obj.List(N).center = objCenter;
         obj.List(N).value  = 0;       
     end
+    function addObjects(obj,objectList)
+        prevSize = obj.Size;
+        obj.Size = obj.Size+objectList.Size;
+        for i=1:objectList.Size
+            obj.List(prevSize+i).size   = objectList.List(i).size;
+            obj.List(prevSize+i).center = objectList.List(i).center;
+            obj.List(prevSize+i).value  = objectList.List(i).value;
+        end
+    end
     function setObjectFeature(objList,objNumber,objFeature)
         objList.List(objNumber).feature  = objFeature;       
     end  
@@ -24,6 +33,26 @@ classdef ObjectList < handle
     function save(objList,filename)
         save(filename,'objList');       
     end 
+    
+    function values = allValues(obj)
+        for i=1:obj.Size
+            values(i) = obj.List(i).value;
+        end
+        values = unique(values);
+    end
+    
+    function [mu, sigma] = statsForValue(obj, value)
+        j = 1;
+        for i=1:obj.Size
+            if (obj.List(i).value == value)
+                sizes(j) = obj.List(i).size;
+                j = j+1;
+            end
+        end
+        mu = mean(sizes);
+        sigma = std(sizes);
+    end
+    
     function show(obj,I)
        imshow(I); 
        hold on;
