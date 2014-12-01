@@ -2,7 +2,7 @@ function p = find_marks( Image )
 % Function to determine the position of the 4 blue marks
 % Warning: Currently only works, if 4 connected components are found
 % Could be improved by closing holes
-    
+
     count = 0;
     threshold = 6;
     while count ~= 4       
@@ -42,6 +42,6 @@ function p = find_marks( Image )
     if distance12 < distance41
         p = p([4,1,2,3], :);    % Permutation, falls p im Hochformat vorliegt
     end
-
+    
 end
 

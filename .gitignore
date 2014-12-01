@@ -1,7 +1,8 @@
 # Temp
 training-bg/*
 training-crop/*
-list/*
+training-list/*
+*.m~
 
 # Noise
 .DS_Store

@@ -28,7 +28,7 @@ classdef ObjectList < handle
        imshow(I); 
        hold on;
        for k=1:obj.Size
-            text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).size),')'],'Color',[1,0,0]);
+            text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),')'],'Color',[1,0,0]);
        end
        hold off;
     end
