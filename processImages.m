@@ -23,7 +23,7 @@ function processImages(imageList, dataPath, classificator, showResults)
             I = projectiveCrop(I1, p);
             imwrite(I, fileCROP); 
             cprintf([.2,.65,.4], '%c ', char(10004));
-            cprintf('text', 'Done cropping image in %s.', toc(tCrop));
+            cprintf('text', 'Done cropping image in %s.\n', toc(tCrop));
         else
             I = imread(fileCROP);
             cprintf([.2,.65,.4], '%c ', char(10004));
@@ -38,7 +38,7 @@ function processImages(imageList, dataPath, classificator, showResults)
             B  = backgroundSubtraction(I); 
             imwrite(B, fileBG);
             cprintf([.2,.65,.4], '%c ', char(10004));
-            cprintf('text', 'Done finding background in %s.\n', toc(tBG));
+            cprintf('text', 'Done finding background in %s. \n', toc(tBG));
         else
             B = imread(fileBG);
             cprintf([.2,.65,.4], '%c ', char(10004));
@@ -48,7 +48,7 @@ function processImages(imageList, dataPath, classificator, showResults)
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
         fileLIST = fullfile([dataPath '-list'], [filename '.mat']);
-        if(exist(fileLIST,'file')==0)
+        if(exist(fileLIST,'file')==0||true)
             tFind = tic;
             fprintf('Finding Coins...\n');
             [coinList, L] = findCoins(B);
@@ -68,7 +68,7 @@ function processImages(imageList, dataPath, classificator, showResults)
                 if (classificator==false)
                     coinList.setObjectValue(n,value);
                 else
-                    size = classificator.valueForCoinSize(coinList.List(n).size)
+                    size = classificator.valueForCoinSize(coinList.List(n).size);
                     coinList.setObjectValue(n,size);
                 end    
             end;
@@ -76,11 +76,11 @@ function processImages(imageList, dataPath, classificator, showResults)
             save(fileLIST,'coinList');
             
             cprintf([.2,.65,.4], '%c ', char(10004));
-            cprintf('text', 'Done finding coins in %s.\n', toc(tFind));
+            cprintf('text', 'Done finding coins in %s. \n', toc(tFind));
         else
             load(fileLIST, 'coinList');
             cprintf([.2,.65,.4], '%c ', char(10004));
-            cprintf('text', 'Already found coins.\n');
+            cprintf('text', 'Already found coins. \n');
         end
         
         fprintf('Processing took %s.\n', toc(tProcessing)); 
@@ -89,10 +89,10 @@ function processImages(imageList, dataPath, classificator, showResults)
         if (showResults)
             scrsz = get(0,'ScreenSize');
             figure('Position',[1 1 scrsz(3) scrsz(4)])
-            subplot(1,2,1);
-            coinList.show(I);
-            subplot(1,2,2);
-            coinList.show(B);
+            leftAxis = subplot(1,2,1);
+            coinList.show(leftAxis, I, false);
+            rightAxis = subplot(1,2,2);
+            coinList.show(rightAxis, B, classificator);
             k = waitforbuttonpress();
             close;
         end

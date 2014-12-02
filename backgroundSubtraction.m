@@ -14,7 +14,7 @@ function B = backgroundSubtraction(I, t)
     
     % SE: Erode/Dilate parameter; Check for a disk shaped region of radius
     % 20, N=6 (Some algorhythm parameter)
-    SE = strel('disk', 20, 6);
+    SE = strel('disk', 5, 6);
     binary_mask = imdilate(binary_mask, SE);
     binary_mask = imerode(binary_mask, SE);
     

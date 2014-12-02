@@ -53,11 +53,34 @@ classdef ObjectList < handle
         sigma = std(sizes);
     end
     
-    function show(obj,I)
+    function show(obj, gca, I, classificator)
        imshow(I); 
        hold on;
        for k=1:obj.Size
-            text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),')'],'Color',[1,0,0]);
+           text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),')'],'Color',[1,0,0]);
+       end
+       
+       if classificator ~= false
+           for k=1:obj.Size
+                subAxes = axes('Position', [0.4 0.1 0.2 0.2]);
+                maxY = 0;
+                for i=1:numel(classificator.values);
+                    mu = classificator.mu(i);
+                    sigma = classificator.sigma(i);
+                    value = classificator.values(i);
+                    x = linspace(mu-5*sigma, mu+5*sigma, 200);
+                    yy = normpdf(mu, mu, sigma);
+                   plot(x, normpdf(x, mu, sigma), 'LineWidth', 1); hold on;
+
+                    if yy > maxY
+                        maxY = yy;
+                    end          
+                               
+                end
+               legend('001','002','005','010','020','050','100','200'); 
+               line('XData', [obj.List(k).size obj.List(k).size], 'YData', [0 maxY], 'LineWidth', 1);
+               break;
+            end
        end
        hold off;
     end
