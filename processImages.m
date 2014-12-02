@@ -2,73 +2,58 @@ function processImages(imageList, dataPath, classificator, showResults)
     [~, ~, ~] = mkdir([dataPath '-crop']);
     [~, ~, ~] = mkdir([dataPath '-bg']);
     [~, ~, ~] = mkdir([dataPath '-list']);
-    colorMode = true;
+
     % Iterate images
     for i=1:numel(imageList)
         tProcessing = tic;
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-        %cprintf('_blue', '\n- Processing image %s...\n', imageList{i});
-        svenPrint('_blue', sprintf('\n- Processing image %s...\n', imageList{i}), colorMode);
+        fprintf('\n')
+        svenPrint(sprintf('- Processing image %s...\n', imageList{i}), '_blue');
         
         % Find marks & Crop
         fileCROP = strrep(imageList{i}, dataPath, [dataPath '-crop']);
         if(exist(fileCROP,'file')==0)
             tCrop = tic;
-            fprintf('Finding marks and cropping...\n');
+            svenPrint('Finding marks and cropping...\n');
             I1  = imread(imageList{i});
             
             p  = find_marks(I1);
             if p == 0
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-               %cprintf('_red', 'Error finding marks on image %s\n', imageList{i});
-               svenPrint('_red', sprintf('Error finding marks on image %s\n', imageList{i}), colorMode);
+               svenPrint(sprintf('Error finding marks on image %s\n', imageList{i}), '_red');
                continue; 
             end
             
             I = projectiveCrop(I1, p);
             imwrite(I, fileCROP); 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Done cropping image in %s.\n', toc(tCrop));
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Done cropping image in %s.\n', toc(tCrop)), colorMode);
+            checkmark();
+            svenPrint(sprintf('Done cropping image in %s.\n', toc(tCrop)), [0,0,0]);
             
         else
             I = imread(fileCROP);
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Already cropped image.\n');
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Already cropped image.\n'), colorMode);
+            checkmark();
+            svenPrint(sprintf('Already cropped image.\n'), [0,0,0]);
         end
         
         % Background subtraction
         fileBG   = strrep(imageList{i}, dataPath, [dataPath '-bg']);
         if (exist(fileBG,'file')==0)
             tBG = tic;
-            fprintf('Finding background...\n');
+            svenPrint('Finding background...\n');
             B  = backgroundSubtraction(I); 
             imwrite(B, fileBG);
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Done finding background in %s. \n', toc(tBG));
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Done finding background in %s. \n', toc(tBG)), colorMode);
+            checkmark();
+            svenPrint(sprintf('Done finding background in %s. \n', toc(tBG)), [0,0,0]);
         else
             B = imread(fileBG);
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Already found background.\n');
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Already found background.\n'), colorMode);
+            checkmark();
+            svenPrint(sprintf('Already found background.\n'), [0,0,0]);
         end
 
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
         fileLIST = fullfile([dataPath '-list'], [filename '.mat']);
-        if(exist(fileLIST,'file')==0||true)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        if(exist(fileLIST,'file')==0||true) % WARNING: Always enabled for testing
             tFind = tic;
-            fprintf('Finding Coins...\n');
+            svenPrint('Finding Coins...\n');
             [coinList, L] = findCoins(B);
             % Get coin value from file name
             if (classificator==false)
@@ -92,21 +77,15 @@ function processImages(imageList, dataPath, classificator, showResults)
             end;
             
             save(fileLIST,'coinList');
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Done finding coins in %s. \n', toc(tFind));
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Done finding coins in %s. \n', toc(tFind)), colorMode);
+            checkmark();
+            svenPrint(sprintf('Done finding coins in %s. \n', toc(tFind)), [0,0,0]);
         else
             load(fileLIST, 'coinList');
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %cprintf([.2,.65,.4], '%c ', char(10004));
-            %cprintf('text', 'Already found coins. \n');
-            checkmark(colorMode);
-            svenPrint([0,0,0], sprintf('Already found coins. \n'), colorMode);
+            checkmark();
+            svenPrint(sprintf('Already found coins. \n'), [0,0,0]);
         end
         
-        fprintf('Processing took %s.\n', toc(tProcessing)); 
+        svenPrint(sprintf('Processing took %s.\n', toc(tProcessing))); 
        
         % Show results
         if (showResults)

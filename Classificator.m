@@ -16,6 +16,8 @@ classdef Classificator < handle
         function learnFromCoinList(self, coinList)
             self.coinList.addObjects(coinList);
             self.computeStats();
+            svenPrint(sprintf('Learnt from %i coins.\n', coinList.Size))
+            fprintf('value: %.2f, mu: %f, sigma: %f\n', [self.values; self.mu; self.sigma])
         end
         
         % Compute mu, sigma
