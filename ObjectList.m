@@ -53,7 +53,7 @@ classdef ObjectList < handle
         sigma = std(sizes);
     end
     
-    function show(obj, gca, I, classificator)
+    function show(obj, I, classificator)
        imshow(I); 
        hold on;
        for k=1:obj.Size
