@@ -70,7 +70,7 @@ classdef ObjectList < handle
                     value = classificator.values(i);
                     x = linspace(mu-5*sigma, mu+5*sigma, 200);
                     yy = normpdf(mu, mu, sigma);
-                   plot(x, normpdf(x, mu, sigma), 'LineWidth', 1); hold on;
+                   plot(x, normpdf(x, mu, sigma) * 1/8 * classificator.sigma(i), 'LineWidth', 1); hold on;
 
                     if yy > maxY
                         maxY = yy;

@@ -49,14 +49,6 @@ function p = find_marks( Image )
         p = p([1,2,4,3], :);
     end
         
-    %if (( p(2, 1) < p(3, 1) ) && ( p(2, 1) < p(1, 1) ))
-    %    p = p([1,3,2,4], :);        % Permutiere ggf. 2 &3 Koordinate
-    %end
-    
-    %if ~(( p(4, 1) < p(2, 1) ) && ( p(4, 1) < p(3, 1) ))
-    %    p = p([1,2,4,3], :);            % Tausche 4 &3
-    %end
-        
     % Prüfe nach Hochformat/Querformat:
     distance12 = (p(1,1) - p(2,1)).^2 + (p(1,2) - p(2,2)).^2;
     distance41 = (p(1,1) - p(4,1)).^2 + (p(1,2) - p(4,2)).^2;

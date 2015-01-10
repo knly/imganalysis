@@ -33,7 +33,7 @@ classdef Classificator < handle
             
             for i=1:numel(self.values);
                 value = self.values(i);
-                p(i) = normpdf(size, self.mu(i), self.sigma(i));                
+                p(i) = normpdf(size, self.mu(i), self.sigma(i)) * 1/8 * self.sigma(i);                
             end
             [~, indices] = sort(p);            
             v = self.values(indices(numel(indices)));
