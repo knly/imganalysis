@@ -8,12 +8,19 @@ classdef ObjectList < handle
        obj.Size=0;
     end
     
-    function addObject(obj,objSize,objCenter)
-        N = obj.Size+1;
-        obj.Size = N;
-        obj.List(N).size   = objSize;
-        obj.List(N).center = objCenter;
-        obj.List(N).value  = 0;       
+    function feature_names = featureNames(self)
+        feature_names{1} = 'size';
+        feature_names{2} = 'hue';
+        feature_names{3} = 'sat';
+    end
+    
+    function addObject(self,center,size,hue,sat)
+        N = self.Size+1;
+        self.Size = N;
+        self.List(N).size   = size;
+        self.List(N).center = center;
+        self.List(N).hue = hue;
+        self.List(N).sat = sat;
     end
     function addObjects(obj,objectList)
         prevSize = obj.Size;
@@ -22,15 +29,14 @@ classdef ObjectList < handle
             obj.List(prevSize+i).size   = objectList.List(i).size;
             obj.List(prevSize+i).center = objectList.List(i).center;
             obj.List(prevSize+i).value  = objectList.List(i).value;
+            obj.List(prevSize+i).hue  = objectList.List(i).hue;
+            obj.List(prevSize+i).sat  = objectList.List(i).sat;
         end
     end
-    function setObjectFeature(objList,objNumber,objFeature)
-        objList.List(objNumber).feature  = objFeature;       
-    end  
-    function setObjectValue(objList,objNumber,objValue)
-        objList.List(objNumber).value  = objValue;       
-    end    
-    function save(objList,filename)
+    function setObjectValue(self,i,value)
+        self.List(i).value  = value;       
+    end
+    function save(self,filename)
         save(filename,'objList');       
     end 
     
@@ -41,37 +47,43 @@ classdef ObjectList < handle
         values = unique(values);
     end
     
-    function [mu, sigma] = statsForValue(obj, value)
-        j = 1;
-        for i=1:obj.Size
-            if (obj.List(i).value == value)
-                sizes(j) = obj.List(i).size;
-                j = j+1;
+    function [mu, sigma] = statsForValue(self, value)
+        feature_names = self.featureNames();
+        for feature_i=1:numel(feature_names)
+            j = 1;
+            for i=1:self.Size
+                if (self.List(i).value == value)
+                    vs(j) = getfield(self.List(i),feature_names{feature_i});
+                    j = j+1;
+                end
             end
+            mu(feature_i) = mean(vs);
+            sigma(feature_i) = std(vs);
         end
-        mu = mean(sizes);
-        sigma = std(sizes);
     end
     
     function show(obj, I, classificator)
        imshow(I); 
        hold on;
        for k=1:obj.Size
-           text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),')'],'Color',[1,0,0]);
+           text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),' EUR, h=',num2str(obj.List(k).hue),', s=',num2str(obj.List(k).sat),')' ],'Color',[1,0,0]);
        end
+       
+       feature_i = 3;
        
        if classificator ~= false
            for k=1:obj.Size
                 subAxes = axes('Position', [0.4 0.1 0.2 0.2]);
                 maxY = 0;
                 for i=1:numel(classificator.values);
-                    mu = classificator.mu(i);
-                    sigma = classificator.sigma(i);
+                    mu = classificator.mu{i};
+                    mu = mu(feature_i);
+                    sigma = classificator.sigma{i};
+                    sigma = sigma(feature_i);
                     value = classificator.values(i);
                     x = linspace(mu-5*sigma, mu+5*sigma, 200);
-                    yy = normpdf(mu, mu, sigma);
-                   plot(x, normpdf(x, mu, sigma) * 1/8 * classificator.sigma(i), 'LineWidth', 1); hold on;
-
+                    yy = normpdf(mu, mu, sigma) * 1/8 * sigma;
+                    plot(x, normpdf(x, mu, sigma) * 1/8 * sigma, 'LineWidth', 1); hold on;
                     if yy > maxY
                         maxY = yy;
                     end          

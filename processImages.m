@@ -54,7 +54,7 @@ function processImages(imageList, dataPath, classificator, showResults)
         if(exist(fileLIST,'file')==0||true) % WARNING: Always enabled for testing
             tFind = tic;
             svenPrint('Finding Coins...\n');
-            [coinList, L] = findCoins(B);
+            [coinList, L] = findCoins(B, I);
             % Get coin value from file name
             if (classificator==false)
                 if(numel(strfind(filename,'001'))>0), value = 0.01; end;
@@ -71,9 +71,9 @@ function processImages(imageList, dataPath, classificator, showResults)
                 if (classificator==false)
                     coinList.setObjectValue(n,value);
                 else
-                    size = classificator.valueForCoinSize(coinList.List(n).size);
-                    coinList.setObjectValue(n,size);
-                end    
+                    v = classificator.valueForCoin(coinList.List(n));
+                    coinList.setObjectValue(n,v);
+                end
             end;
             
             save(fileLIST,'coinList');
