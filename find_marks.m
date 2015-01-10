@@ -16,9 +16,9 @@ function p = find_marks( Image )
 
         %Close Holes
 
-        SE = strel('disk', 10, 6);
-        image_bin = imdilate(image_bin, SE);
-        image_bin = imerode(image_bin, SE);
+        %SE = strel('disk', 10, 6);
+        %image_bin = imdilate(image_bin, SE);
+        %image_bin = imerode(image_bin, SE);
    
     
         %Find connected components and determine the center
@@ -29,7 +29,7 @@ function p = find_marks( Image )
         [count, ~] = size(p);
         threshold = threshold +1;
     end
-    
+    imshow(image_bin);
     if count ~= 4
         p = 0;
         return
@@ -51,8 +51,10 @@ function p = find_marks( Image )
         
     % Prüfe nach Hochformat/Querformat:
     distance12 = (p(1,1) - p(2,1)).^2 + (p(1,2) - p(2,2)).^2;
+    distance23 = (p(2,1) - p(3,1)).^2 + (p(2,2) - p(3,2)).^2;
+    distance34 = (p(3,1) - p(4,1)).^2 + (p(3,2) - p(4,2)).^2;
     distance41 = (p(1,1) - p(4,1)).^2 + (p(1,2) - p(4,2)).^2;
-    if distance12 < distance41
+    if distance12 < distance23
         p = p([4,1,2,3], :);    % Permutation, falls p im Hochformat vorliegt
     end
     

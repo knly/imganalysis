@@ -24,6 +24,7 @@ function mat = confusionmat( name )
     
     if size2 ~= iterations
        svenPrint('Wrong amount of coins found\n');
+       mat = zeros(9,9);
        return
     end
     
