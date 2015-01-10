@@ -11,7 +11,7 @@ function mat = confusionmat( name )
     load(['test-list' filesep name]);
     % Get coinvalues, convert them to a vector
     nvar = struct2cell(coinList.List);
-    tlData = cell2mat(cat(1, nvar(3, :)));
+    tlData = cell2mat(cat(1, nvar(5, :)));
     
     confmat = zeros(9,9);
     confmat(1, 2:9) = [0.01,0.02,0.05,0.1,0.2,0.5,1,2];

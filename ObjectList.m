@@ -62,14 +62,20 @@ classdef ObjectList < handle
         end
     end
     
-    function show(obj, I, classificator)
-       imshow(I); 
+    function show(obj, I, classificator, correctValues)
+       imshow(I);
        hold on;
        for k=1:obj.Size
-           text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),' EUR, h=',num2str(obj.List(k).hue),', s=',num2str(obj.List(k).sat),')' ],'Color',[1,0,0]);
+           isCorrect = correctValues(k)==obj.List(k).value
+           if isCorrect
+               textColor = 'green'
+           else
+               textColor = 'red'
+           end
+           text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),' EUR)' ],'Color',textColor,'BackgroundColor',[1,1,1]);
        end
        
-       feature_i = 3;
+       feature_i = 1;
        
        if classificator ~= false
            for k=1:obj.Size

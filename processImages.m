@@ -51,7 +51,7 @@ function processImages(imageList, dataPath, classificator, showResults)
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
         fileLIST = fullfile([dataPath '-list'], [filename '.mat']);
-        if(exist(fileLIST,'file')==0||true) % WARNING: Always enabled for testing
+        if(exist(fileLIST,'file')==0||false) % WARNING: Always enabled for testing
             tFind = tic;
             svenPrint('Finding Coins...\n');
             [coinList, L] = findCoins(B, I);
@@ -91,10 +91,17 @@ function processImages(imageList, dataPath, classificator, showResults)
         if (showResults)
             scrsz = get(0,'ScreenSize');
             figure('Position',[1 1 scrsz(3) scrsz(4)])
-            subplot(1,2,1);
-            coinList.show(I, false);
-            subplot(1,2,2);
-            coinList.show(B, classificator);
+            %subplot(1,2,1);
+            
+            load(['test-list-confusiondata' filesep filename])
+            
+            coinList.show(I, false, confData);
+            
+            %subplot(1,2,2);
+            %coinList.show(B, classificator);
+            
+            confusionmat(filename)
+            
             k = waitforbuttonpress();
             close;
         end

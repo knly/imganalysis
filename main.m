@@ -44,6 +44,3 @@ processImages(testImageList, 'test', classificator, true)
 
 % TODO:
 % - Münzgröße durch Kreis annähern
-% - Farbe als zusätzlichen Klassifikator
-% - svm
-% - Konfusionsmatrix
