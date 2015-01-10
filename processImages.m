@@ -14,15 +14,15 @@ function processImages(imageList, dataPath, classificator, showResults)
         if(exist(fileCROP,'file')==0)
             tCrop = tic;
             svenPrint('Finding marks and cropping...\n');
-            I1  = imread(imageList{i});
+            I_original  = imread(imageList{i});
             
-            p  = find_marks(I1);
+            p  = find_marks(I_original);
             if p == 0
                svenPrint(sprintf('Error finding marks on image %s\n', imageList{i}), '_red');
                continue; 
             end
             
-            I = projectiveCrop(I1, p);
+            I = projectiveCrop(I_original, p);
             imwrite(I, fileCROP); 
             checkmark();
             svenPrint(sprintf('Done cropping image in %s.\n', toc(tCrop)), [0,0,0]);
@@ -33,28 +33,13 @@ function processImages(imageList, dataPath, classificator, showResults)
             svenPrint(sprintf('Already cropped image.\n'), [0,0,0]);
         end
         
-        % Background subtraction
-        fileBG   = strrep(imageList{i}, dataPath, [dataPath '-bg']);
-        if (exist(fileBG,'file')==0)
-            tBG = tic;
-            svenPrint('Finding background...\n');
-            B  = backgroundSubtraction(I); 
-            imwrite(B, fileBG);
-            checkmark();
-            svenPrint(sprintf('Done finding background in %s. \n', toc(tBG)), [0,0,0]);
-        else
-            B = imread(fileBG);
-            checkmark();
-            svenPrint(sprintf('Already found background.\n'), [0,0,0]);
-        end
-
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
         fileLIST = fullfile([dataPath '-list'], [filename '.mat']);
         if(exist(fileLIST,'file')==0||false) % WARNING: Always enabled for testing
             tFind = tic;
             svenPrint('Finding Coins...\n');
-            [coinList, L] = findCoins(B, I);
+            [coinList, L] = findCoins(I);
             % Get coin value from file name
             if (classificator==false)
                 if(numel(strfind(filename,'001'))>0), value = 0.01; end;
