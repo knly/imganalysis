@@ -32,14 +32,15 @@ classdef Classificator < handle
         end
                 
         function v = valueForCoin(self, coin)
-            
+            feature_names = self.coinList.featureNames();
             for i=1:numel(self.values);
                 value = self.values(i);
                 mu = self.mu{i};
                 sigma = self.sigma{i};
-                p(i) = normpdf(coin.size, mu(1), sigma(1)) * 1/8 * sigma(1);
-                p(i) = p(i) * normpdf(coin.hue, mu(2), sigma(2)) * 1/8 * sigma(2);
-                p(i) = p(i) * normpdf(coin.sat, mu(3), sigma(3)) * 1/8 * sigma(3);
+                p(i) = 1;
+                for feature_i=1:numel(feature_names)
+                    p(i) = p(i) * normpdf(getfield(coin, feature_names{feature_i}), mu(feature_i), sigma(feature_i)) * 1/8 * sigma(feature_i);
+                end
                 %p(i) = mvnpdf([coin.size, coin.hue, coin.sat], self.mu{i}, self.sigma{i});                
             end
             [~, indices] = sort(p);            

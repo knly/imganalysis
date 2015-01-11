@@ -12,15 +12,17 @@ classdef ObjectList < handle
         feature_names{1} = 'size';
         feature_names{2} = 'hue';
         feature_names{3} = 'sat';
+        feature_names{4} = 'sat_diff';
     end
     
-    function addObject(self,center,size,hue,sat)
+    function addObject(self,center,size,hue,sat,sat_diff)
         N = self.Size+1;
         self.Size = N;
         self.List(N).size   = size;
         self.List(N).center = center;
         self.List(N).hue = hue;
         self.List(N).sat = sat;
+        self.List(N).sat_diff = sat_diff;
     end
     function addObjects(obj,objectList)
         prevSize = obj.Size;
@@ -31,6 +33,7 @@ classdef ObjectList < handle
             obj.List(prevSize+i).value  = objectList.List(i).value;
             obj.List(prevSize+i).hue  = objectList.List(i).hue;
             obj.List(prevSize+i).sat  = objectList.List(i).sat;
+            obj.List(prevSize+i).sat_diff  = objectList.List(i).sat_diff;
         end
     end
     function setObjectValue(self,i,value)

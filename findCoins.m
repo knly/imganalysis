@@ -33,11 +33,15 @@ function coinList = findCoins(I)
         linear_indices = cell2mat(all_components.PixelIdxList(i));
         B_individual(linear_indices) = 1;
         
+        individual_component_reduced = bwconncomp(B_individual);
+        linear_indices_reduced = cell2mat(individual_component_reduced.PixelIdxList);
+
         B_individual = imdilate(B_individual, reduce);
         
         B = B | B_individual;
         
         individual_component = bwconncomp(B_individual);
+        %r = regionprops(individual_component,'MajorAxisLength').MajorAxisLength / 2        
         linear_indices = cell2mat(individual_component.PixelIdxList);
         objectSize = numel(linear_indices);
         
@@ -48,12 +52,13 @@ function coinList = findCoins(I)
             sats = I_sat(linear_indices);
             hue = mean(hues);
             sat = mean(sats);
+            sat_diff = mean(I_sat(linear_indices_reduced)) / sat;
             
             %imshow(B_individual);
             %waitforbuttonpress();
             %close;
         
-            coinList.addObject(objectCenter,objectSize,hue,sat);
+            coinList.addObject(objectCenter,objectSize,hue,sat,sat_diff);
         end
      
     end
