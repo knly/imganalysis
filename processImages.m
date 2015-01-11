@@ -1,6 +1,7 @@
 function processImages(imageList, dataPath, classificator, showResults)
     [~, ~, ~] = mkdir([dataPath '-crop']);
     [~, ~, ~] = mkdir([dataPath '-list']);
+    [~, ~, ~] = mkdir([dataPath '-result']);
 
     % Iterate images
     for i=1:numel(imageList)
@@ -77,23 +78,30 @@ function processImages(imageList, dataPath, classificator, showResults)
         svenPrint(sprintf('Processing took %s.\n', toc(tProcessing))); 
        
         % Show results
-        if (showResults)
+        if showResults
             scrsz = get(0,'ScreenSize');
-            figure('Position',[1 1 scrsz(3) scrsz(4)])
-            %subplot(1,2,1);
-            
-            if classificator~=false
-                load(['test-list-confusiondata' filesep filename]);
-                confusionmat(filename);
-            else
-                confData = false;
-            end
-            
-            coinList.show(I, false, confData);
-            
-            %subplot(1,2,2);
-            %coinList.show(B, classificator);
-                        
+            f = figure('Position',[1 1 scrsz(3) scrsz(4)]);
+        else
+            f = figure('Visible', 'off');
+        end
+
+        %subplot(1,2,1);
+
+        if classificator~=false
+            load(['test-list-confusiondata' filesep filename]);
+            confusionmat(filename);
+        else
+            confData = false;
+        end
+
+        coinList.show(I, false, confData);
+
+        %subplot(1,2,2);
+        %coinList.show(B, classificator);
+
+        print(f, '-dpng', [dataPath '-result' filesep filename])
+
+        if showResults
             k = waitforbuttonpress();
             close;
         end

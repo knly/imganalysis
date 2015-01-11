@@ -39,7 +39,7 @@ fprintf('\n')
 testImageList = getImageList('test');
 
 % Process test images to find coins
-processImages(testImageList, 'test', classificator, true)
+processImages(testImageList, 'test', classificator, false)
 
 
 % TODO:
