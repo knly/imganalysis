@@ -7,6 +7,7 @@ function processImages(imageList, dataPath, classificator, showResults)
         tProcessing = tic;
         fprintf('\n')
         svenPrint(sprintf('- Processing image %s...\n', imageList{i}), '_blue');
+        landscape = 0;
         
         % Find marks & Crop
         fileCROP = strrep(imageList{i}, dataPath, [dataPath '-crop']);
@@ -15,7 +16,11 @@ function processImages(imageList, dataPath, classificator, showResults)
             svenPrint('Finding marks and cropping...\n');
             I_original  = imread(imageList{i});
             
-            p  = find_marks(I_original);
+            if sum([strfind(imageList{i}, 't01-3') strfind(imageList{i}, 't03-3') strfind(imageList{i}, 't04-3') strfind(imageList{i}, 't06-4')])>0
+                landscape = 1;
+            end
+                
+            p  = find_marks(I_original, landscape);
             if p == 0
                svenPrint(sprintf('Error finding marks on image %s\n', imageList{i}), '_red');
                continue; 
