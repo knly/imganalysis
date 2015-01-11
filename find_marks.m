@@ -1,8 +1,10 @@
-function p = find_marks( Image, landscape...perfilename )
+function p = find_marks( Image, landscape )
 % Function to determine the position of the 4 blue marks
 % Warning: Currently only works, if 4 connected components are found
 % Could be improved by closing holes
-
+    if nargin<2
+        landscape = 0;
+    end
     count = 0;  % counts # of blue components
     
     threshold = 6;
@@ -69,7 +71,7 @@ function p = find_marks( Image, landscape...perfilename )
     
     % Prüfe nach Hochformat/Querformat:
     %%if distance12 < distance41
-    if (distance12 < distance41) || (abs(arc1-arc3)+abs(arc2-arc4))>40
+    if xor(((distance12 < distance41) || (abs(arc1-arc3)+abs(arc2-arc4))>40), landscape)
         p = p([4,1,2,3], :);    % Permutation, falls p im Hochformat vorliegt
     end
     
