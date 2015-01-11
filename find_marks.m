@@ -29,7 +29,7 @@ function p = find_marks( Image )
         [count, ~] = size(p);
         threshold = threshold +1;
     end
-    imshow(image_bin);
+    
     if count ~= 4
         p = 0;
         return

@@ -1,59 +1,66 @@
-function [coinList, L] = findCoins(I)
+function coinList = findCoins(I)
 % Zu jedem Bild wird eine coinList erstellt. Sie ist vom Typ ObjectList
 % und enthält Objektgrösse und Objektmittelpunkt
 % L enthält das Binärbild, wobei die Wertigkeit der Pixel abhängig von 
 % ihrer Zusammenhangskomponente ist
     
+    %imshow(I);
+    %waitforbuttonpress();
+    %close;
+
     I_hsv = rgb2hsv(I);
     I_hue = I_hsv(:,:,1);
     I_sat = I_hsv(:,:,2);
     
-    %Saturation is best used to view only foreground, Saturation is channel
-    %2. Create a binary mask by using a threshold on the hsv image:
-    binary_mask = I_hsv(:,:,2) > 0.15;
+    B = I_hsv(:,:,2) > 0.15;
     
-    % close holes with dilate, then erode by the
-    % same amount to get back to the original size
-    
-    % SE: Erode/Dilate parameter; Check for a disk shaped region of radius
-    % 20, N=6 (Some algorithm parameter)
-    SE = strel('disk', 5, 6);
-    binary_mask = imdilate(binary_mask, SE);
-    binary_mask = imerode(binary_mask, SE);
-    
-    B = binary_mask;
+    close_holes = strel('disk', 10, 6);
+    B = imdilate(B, close_holes);
+    B = imerode(B, close_holes);
 
+    reduce = strel('disk', 50, 6);
+    B_reduced = imerode(B, reduce);
     
-    
-    
-    CC = bwconncomp(B);
-    numObj   = CC.NumObjects;
-    S = regionprops(CC,'Centroid');
-    p = cat(1, S.Centroid); % Struct2Mat
-    P = regionprops(CC,'PixelList');
+    all_components = bwconncomp(B_reduced);
+    centers = regionprops(all_components,'Centroid');
+    centers = cat(1, centers.Centroid); % Struct2Mat
     
     coinList = ObjectList();
-    m = 0;
-    L = zeros(size(I));
-    for i=1:numObj
-        pixels = P(i).PixelList;
-        objectSize   = numel(pixels);
+    
+    B = zeros(size(B));
+    for i=1:all_components.NumObjects
+        B_individual = zeros(size(B));
+        linear_indices = cell2mat(all_components.PixelIdxList(i));
+        B_individual(linear_indices) = 1;
+        
+        B_individual = imdilate(B_individual, reduce);
+        
+        B = B | B_individual;
+        
+        individual_component = bwconncomp(B_individual);
+        linear_indices = cell2mat(individual_component.PixelIdxList);
+        objectSize = numel(linear_indices);
         
         if objectSize > 5000
-            m = m + 1; % Wert für Zusammenhangskomponente
-            L(pixels) = m;
+            objectCenter = centers(i, :);
             
-            objectCenter = p(i, :);
-            
-            linear_indices = cell2mat(CC.PixelIdxList(i));
             hues = I_hue(linear_indices);
             sats = I_sat(linear_indices);
             hue = mean(hues);
             sat = mean(sats);
+            
+            %imshow(B_individual);
+            %waitforbuttonpress();
+            %close;
         
             coinList.addObject(objectCenter,objectSize,hue,sat);
         end
      
     end
+    
+    %imshow(B);
+    %waitforbuttonpress();
+    %close;
+    
     %coinList.showHist();
 end

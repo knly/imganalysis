@@ -66,11 +66,15 @@ classdef ObjectList < handle
        imshow(I);
        hold on;
        for k=1:obj.Size
-           isCorrect = correctValues(k)==obj.List(k).value
-           if isCorrect
-               textColor = 'green'
+           if correctValues == false
+               isCorrect = 1;
            else
-               textColor = 'red'
+               isCorrect = correctValues(k)==obj.List(k).value;
+           end
+           if isCorrect
+               textColor = 'green';
+           else
+               textColor = 'red';
            end
            text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),' EUR)' ],'Color',textColor,'BackgroundColor',[1,1,1]);
        end

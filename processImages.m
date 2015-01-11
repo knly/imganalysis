@@ -1,6 +1,5 @@
 function processImages(imageList, dataPath, classificator, showResults)
     [~, ~, ~] = mkdir([dataPath '-crop']);
-    [~, ~, ~] = mkdir([dataPath '-bg']);
     [~, ~, ~] = mkdir([dataPath '-list']);
 
     % Iterate images
@@ -36,10 +35,10 @@ function processImages(imageList, dataPath, classificator, showResults)
         % Find Coins and save to list
         [~,filename,~] = fileparts(imageList{i});
         fileLIST = fullfile([dataPath '-list'], [filename '.mat']);
-        if(exist(fileLIST,'file')==0||false) % WARNING: Always enabled for testing
+        if(exist(fileLIST,'file')==0||false) % WARNING: Always enabled for testing when set to ||true
             tFind = tic;
             svenPrint('Finding Coins...\n');
-            [coinList, L] = findCoins(I);
+            coinList = findCoins(I);
             % Get coin value from file name
             if (classificator==false)
                 if(numel(strfind(filename,'001'))>0), value = 0.01; end;
@@ -78,15 +77,18 @@ function processImages(imageList, dataPath, classificator, showResults)
             figure('Position',[1 1 scrsz(3) scrsz(4)])
             %subplot(1,2,1);
             
-            load(['test-list-confusiondata' filesep filename])
+            if classificator~=false
+                load(['test-list-confusiondata' filesep filename]);
+                confusionmat(filename);
+            else
+                confData = false;
+            end
             
             coinList.show(I, false, confData);
             
             %subplot(1,2,2);
             %coinList.show(B, classificator);
-            
-            confusionmat(filename)
-            
+                        
             k = waitforbuttonpress();
             close;
         end
