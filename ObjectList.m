@@ -79,6 +79,12 @@ classdef ObjectList < handle
            else
                textColor = 'red';
            end
+           %values = [0.01,0.02,0.05,0.1,0.2,0.5,1,2];
+           %value_i = find(values==obj.List(k).value);
+           %p_value = obj.List(k).p(value_i) * 100;
+           %correctValue = correctValues(k);
+           %correctValue_i = find(values==correctValue);
+           %p_correctValue = obj.List(k).p(correctValue_i) * 100;
            text(obj.List(k).center(1),obj.List(k).center(2),[num2str(k),' (',num2str(obj.List(k).value),' EUR)' ],'Color',textColor,'BackgroundColor',[1,1,1]);
        end
        

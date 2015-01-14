@@ -31,7 +31,7 @@ classdef Classificator < handle
             end
         end
                 
-        function v = valueForCoin(self, coin)
+        function [v, p] = valueForCoin(self, coin)
             feature_names = self.coinList.featureNames();
             weight = [2, 1, 1, 1];
             for i=1:numel(self.values);
@@ -44,7 +44,8 @@ classdef Classificator < handle
                 end
                 %p(i) = mvnpdf([coin.size, coin.hue, coin.sat], self.mu{i}, self.sigma{i});                
             end
-            [~, indices] = sort(p);            
+            p = p / sum(p);
+            [~, indices] = sort(p);
             v = self.values(indices(numel(indices)));
         end
         

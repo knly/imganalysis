@@ -18,7 +18,7 @@ function coinList = findCoins(I)
     B = imdilate(B, close_holes);
     B = imerode(B, close_holes);
 
-    reduce = strel('disk', 50, 6);
+    reduce = strel('disk', 60, 6);
     B_reduced = imerode(B, reduce);
     
     all_components = bwconncomp(B_reduced);

@@ -61,8 +61,9 @@ function processImages(imageList, dataPath, classificator, showResults)
                 if (classificator==false)
                     coinList.setObjectValue(n,value);
                 else
-                    v = classificator.valueForCoin(coinList.List(n));
+                    [v, p] = classificator.valueForCoin(coinList.List(n));
                     coinList.setObjectValue(n,v);
+                    coinList.List(n).p = p;
                 end
             end;
             
