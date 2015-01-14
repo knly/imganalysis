@@ -7,11 +7,11 @@ function mat = confusionmat( name )
     % Load confusiondata for specified image, var name is confData
     load(['test-list-confusiondata' filesep name]);
     
-    % Load test-list data, var name is tlData
+    % Load test-list data, var name will be tlData
     load(['test-list' filesep name]);
     % Get coinvalues, convert them to a vector
     nvar = struct2cell(coinList.List);
-    tlData = cell2mat(cat(1, nvar(5, :)));
+    tlData = cell2mat(cat(1, nvar(6, :)));
     
     confmat = zeros(9,9);
     confmat(1, 2:9) = [0.01,0.02,0.05,0.1,0.2,0.5,1,2];
@@ -25,6 +25,8 @@ function mat = confusionmat( name )
     if size2 ~= iterations
        svenPrint('Wrong amount of coins found\n');
        mat = zeros(9,9);
+       mat(1, 2:9) = [0.01,0.02,0.05,0.1,0.2,0.5,1,2];
+       mat(2:9, 1) = mat(1, 2:9);
        return
     end
     
