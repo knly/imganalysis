@@ -41,6 +41,6 @@ testImageList = getImageList('test');
 % Process test images to find coins
 processImages(testImageList, 'test', classificator, false)
 
-
+reverse
 % TODO:
 % - Münzgröße durch Kreis annähern
