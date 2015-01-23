@@ -1,10 +1,10 @@
 # Temp
-training-bg/*
 training-crop/*
 training-list/*
-test-bg/*
+training-result/*
 test-crop/*
 test-list/*
+test-result/*
 *.m~
 
 # Noise

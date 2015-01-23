@@ -86,19 +86,14 @@ function processImages(imageList, dataPath, classificator, showResults)
             f = figure('Visible', 'off');
         end
 
-        %subplot(1,2,1);
-
         if classificator~=false
             load(['test-list-confusiondata' filesep filename]);
-            confusionmat(filename);
+            %confusionmat(filename);
         else
             confData = false;
         end
 
         coinList.show(I, false, confData);
-
-        %subplot(1,2,2);
-        %coinList.show(B, classificator);
 
         print(f, '-dpng', [dataPath '-result' filesep filename])
 

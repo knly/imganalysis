@@ -42,7 +42,9 @@ classdef Classificator < handle
                 for feature_i=1:numel(feature_names)
                     p(i) = p(i) * ( normpdf(getfield(coin, feature_names{feature_i}), mu(feature_i), sigma(feature_i)) * 1/8 * sigma(feature_i) ) ^ weight(feature_i);
                 end
-                %p(i) = mvnpdf([coin.size, coin.hue, coin.sat], self.mu{i}, self.sigma{i});                
+                % this weighted product of probabilities seems to yield
+                % better results than a multivariate gaussian with
+                % mvnpdf([coin.size, coin.hue, coin.sat], self.mu{i}, self.sigma{i})
             end
             p = p / sum(p);
             [~, indices] = sort(p);
