@@ -33,7 +33,7 @@ classdef Classificator < handle
                 
         function [v, p] = valueForCoin(self, coin)
             feature_names = self.coinList.featureNames();
-            weight = [2, 1, 1, 1];
+            weight = [1, 1, 1, 1];
             for i=1:numel(self.values);
                 value = self.values(i);
                 mu = self.mu{i};

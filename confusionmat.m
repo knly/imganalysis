@@ -23,7 +23,7 @@ function mat = confusionmat( name )
     [~, size2] = size(tlData);
     
     if size2 ~= iterations
-       svenPrint('Wrong amount of coins found\n');
+       svenPrint(['Wrong amount of coins found in ' name '\n']);
        mat = zeros(9,9);
        mat(1, 2:9) = [0.01,0.02,0.05,0.1,0.2,0.5,1,2];
        mat(2:9, 1) = mat(1, 2:9);

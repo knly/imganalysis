@@ -47,8 +47,8 @@ function coinList = findCoins(I)
             % computing coin size..
             individual_component = individual_components{k};
             linear_indices = individual_component.PixelIdxList;
-            objectSize = numel(linear_indices); % seems to yield better results than 'MinorAxisLength'
-            %objectSize = individual_component.MinorAxisLength;
+            %objectSize = numel(linear_indices); % seems to yield better results than 'MinorAxisLength'
+            objectSize = individual_component.MinorAxisLength;
 
             % filter small objects
             if numel(linear_indices) > 5000
@@ -59,11 +59,14 @@ function coinList = findCoins(I)
                 sats = I_sat(linear_indices);
                 hue = mean(hues);
                 sat = mean(sats);
-                inner_radius = individual_component.MinorAxisLength / 4;
+                radius = individual_component.MinorAxisLength / 2;
+                inner_radius = radius*3/5;
                 s = size(B);
                 [rr cc] = meshgrid(1:s(2),1:s(1));
-                B_inner = sqrt((rr-objectCenter(1)).^2+(cc-objectCenter(2)).^2)<=inner_radius;
-                sat_diff = mean(I_sat(B_inner)) / sat;
+                dist = sqrt((rr-objectCenter(1)).^2+(cc-objectCenter(2)).^2);
+                B_inner = dist<=inner_radius;
+                B_outer = dist>inner_radius & dist<=radius;
+                sat_diff = mean(I_sat(B_inner)) / mean(I_sat(B_outer));
 
                 coinList.addObject(objectCenter,objectSize,hue,sat,sat_diff);
             end
