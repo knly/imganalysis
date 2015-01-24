@@ -47,7 +47,6 @@ function coinList = findCoins(I)
             % computing coin size..
             individual_component = individual_components{k};
             linear_indices = individual_component.PixelIdxList;
-            %objectSize = numel(linear_indices); % seems to yield better results than 'MinorAxisLength'
             objectSize = individual_component.MinorAxisLength;
 
             % filter small objects
