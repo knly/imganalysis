@@ -54,4 +54,4 @@ fprintf('\n')
 testImageList = getImageList('test');
 
 % Process test images to find coins
-processImages(testImageList, 'test', classificator, true) % change last boolean to false to not show the result after every step
+processImages(testImageList, 'test', classificator, false) % change last boolean to false to not show the result after every step
